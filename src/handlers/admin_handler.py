@@ -61,7 +61,7 @@ async def admin_accept_payment(callback: CallbackQuery, state: FSMContext):
         )
         await bot.send_photo(
             chat_id=client_chat_id,
-            photo=FSInputFile(f'./src/photo/{client_data.get('seat')}_билет.jpg'),
+            photo=FSInputFile(f'./src/photo/{client_data.get("seat")}_билет.jpg'),
             caption=TICKET,
             parse_mode='HTML'
         )
