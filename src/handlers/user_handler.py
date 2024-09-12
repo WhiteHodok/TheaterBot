@@ -135,13 +135,13 @@ async def payment(callback: CallbackQuery, state: FSMContext):
     Функция обрабатывает нажатие на место
     """
     try:
-        await state.set_state(User.payment)
         chat_id = callback.message.chat.id
         seat = int(callback.data)
-        state_data = await state.get_data()
         response = supabase.table('Seats').select('*').eq('seat_id', seat).execute()
         if not response.data:
             try:
+                await state.set_state(User.payment)
+                state_data = await state.get_data()
                 main_message_id = state_data.get('main_message_id')
                 await bot.edit_message_caption(
                     chat_id=chat_id,
@@ -153,6 +153,8 @@ async def payment(callback: CallbackQuery, state: FSMContext):
                 await state.update_data(seat=seat)
             except:
                 pass
+        else:
+            await buy_ticket(callback, state)
     except Exception as e:
         await error_bot('payment', callback.message, str(e))
 
